@@ -1,16 +1,14 @@
 package se.doverfelt.thegame.net;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.Json;
-import se.doverfelt.thegame.net.packet.Packet;
-import se.doverfelt.thegame.net.packet.Packet1Accepted;
-import se.doverfelt.thegame.net.packet.Packet3Disconnected;
-import se.doverfelt.thegame.net.packet.PacketWrapper;
+import se.doverfelt.thegame.net.packet.*;
 import se.doverfelt.thegame.net.util.ClientConnection;
 import se.doverfelt.thegame.net.util.PacketListener;
 
@@ -101,6 +99,17 @@ public class Server {
     public void handle(PacketWrapper p, String source) {
         if (p.packet instanceof Packet3Disconnected) {
             connections.remove(source).close();
+            return;
+        }
+
+        if (p.packet instanceof Packet4KeyPressed) {
+            Packet5Message packet5Message = new Packet5Message();
+            packet5Message.message = Input.Keys.toString(((Packet4KeyPressed) p.packet).key);
+            try {
+                broadcast(packet5Message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
