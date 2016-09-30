@@ -7,13 +7,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import se.doverfelt.thegame.Screens.CScreen;
 import se.doverfelt.thegame.Screens.MainMenu;
+import se.doverfelt.thegame.server.ServerWorld;
+import se.doverfelt.thegame.server.ServerManager;
 import se.doverfelt.thegame.net.Client;
 import se.doverfelt.thegame.server.ServerManager;
 import se.doverfelt.thegame.Screens.LoadingScreen;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,11 +40,10 @@ public class TheGame extends Game {
 		screens.put("main", main);
 		setScreen(load);
 
-
+		new ServerWorld();
 
 		serverManager = new ServerManager(true);
 		client = new Client("localhost", 30916);
-
 	}
 
 	@Override
@@ -64,7 +63,6 @@ public class TheGame extends Game {
 	
 	@Override
 	public void dispose () {
-		//batch.dispose();
-		//img.dispose();
+		batch.dispose();
 	}
 }
