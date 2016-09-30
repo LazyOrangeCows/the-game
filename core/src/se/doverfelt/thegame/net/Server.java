@@ -15,7 +15,9 @@ import se.doverfelt.thegame.net.util.ClientConnection;
 import se.doverfelt.thegame.net.util.PacketListener;
 
 import java.io.IOException;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 /**
@@ -25,11 +27,14 @@ public class Server {
 
     private final ServerSocket serverSocket;
     private final SocketHints socketHints;
-    private Socket socket;
     private ArrayList<PacketListener> packetListeners = new ArrayList<PacketListener>();
     private HashMap<String, ClientConnection> connections = new HashMap<String, ClientConnection>();
     private Json json;
 
+    /**
+     * @param host
+     * @param port
+     */
     public Server(String host, int port) {
         json = new Json();
         ServerSocketHints hints = new ServerSocketHints();
@@ -40,16 +45,30 @@ public class Server {
         startAccepting();
     }
 
+    /**
+     * Send a packet
+     * @param packet The packet {@link Packet}
+     * @param address The receiving address
+     * @throws IOException Exception...
+     */
     public void send(Packet packet, String address) throws IOException {
         connections.get(address).send(packet);
     }
 
+    /**
+     * @param packet The packet {@link Packet}
+     * @throws IOException
+     */
     public void broadcast(Packet packet) throws IOException {
         for (ClientConnection c : connections.values()) {
             c.send(packet);
         }
     }
 
+    /**
+     *
+     * @param listener The packet listener
+     */
     public void addPacketListener(PacketListener listener) {
         packetListeners.add(listener);
         for (ClientConnection c : connections.values()) {
@@ -57,9 +76,10 @@ public class Server {
         }
     }
 
-    public void startAccepting() {
+    private void startAccepting() {
         final Server server = this;
         Runnable acceptor = new Runnable() {
+            @SuppressWarnings("InfiniteLoopStatement")
             @Override
             public void run() {
                 while (true) {
@@ -98,5 +118,34 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @return The address of the local host in LAN
+     * @throws SocketException Something went wrong...
+     */
+    public String getAddress() throws SocketException {
+        for (final Enumeration< NetworkInterface > interfaces = NetworkInterface.getNetworkInterfaces( ); interfaces.hasMoreElements( ); ) {
+            final NetworkInterface cur = interfaces.nextElement( );
+
+            if (cur.isLoopback()) {
+                continue;
+            }
+
+            for ( final InterfaceAddress addr : cur.getInterfaceAddresses()) {
+                final InetAddress inetAddr = addr.getAddress();
+
+                if (!( inetAddr instanceof Inet4Address) )
+                {
+                    continue;
+                }
+
+                if (!(inetAddr.isMulticastAddress()) && !(inetAddr.isMulticastAddress()) && !(inetAddr.isAnyLocalAddress()) && inetAddr.isSiteLocalAddress()) {
+                    return inetAddr.getHostAddress();
+                }
+
+            }
+        }
+        return null;
     }
 }

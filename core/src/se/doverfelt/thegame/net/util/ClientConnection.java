@@ -24,6 +24,11 @@ public class ClientConnection {
     private Thread t;
     private boolean connected = false;
 
+    /**
+     * @param socket The Client socket
+     * @param packetListeners The current packet listeners
+     * @param server The server
+     */
     public ClientConnection(Socket socket, ArrayList<PacketListener> packetListeners, Server server) {
         this.socket = socket;
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -36,10 +41,17 @@ public class ClientConnection {
         startListening();
     }
 
+    /**
+     * @param listener New packet listener
+     */
     public void addListener(PacketListener listener) {
         this.packetListeners.add(listener);
     }
 
+    /**
+     * @param packet Packet to send
+     * @throws IOException Something went wrong
+     */
     public void send(Packet packet) throws IOException {
         PacketWrapper wrapper = new PacketWrapper();
         wrapper.packet = packet;
@@ -67,6 +79,9 @@ public class ClientConnection {
         t.start();
     }
 
+    /**
+     * Close the connection
+     */
     public void close() {
         connected = false;
     }

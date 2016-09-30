@@ -5,7 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<<<<<<< HEAD
 import se.doverfelt.thegame.server.ServerWorld;
+=======
+import se.doverfelt.thegame.server.ServerManager;
+>>>>>>> master
 
 public class TheGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -15,7 +19,11 @@ public class TheGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+<<<<<<< HEAD
 		new ServerWorld();
+=======
+		ServerManager manager = new ServerManager(true);
+>>>>>>> master
 	}
 
 	@Override

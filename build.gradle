@@ -28,6 +28,7 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "http://4thline.org/m2/" }
     }
 }
 
@@ -56,6 +57,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile "org.fourthline.cling:cling:2.1.1"
+        compile "org.fourthline.cling:cling-support:2.1.1"
     }
 }
 
