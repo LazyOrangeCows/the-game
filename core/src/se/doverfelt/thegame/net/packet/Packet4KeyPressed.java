@@ -7,4 +7,7 @@ import com.badlogic.gdx.Input;
  */
 public class Packet4KeyPressed extends Packet {
     public int key;
+    public boolean ctrl;
+    public boolean shift;
+    public boolean alt;
 }

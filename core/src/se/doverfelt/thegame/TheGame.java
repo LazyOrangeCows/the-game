@@ -19,13 +19,11 @@ public class TheGame extends Game {
 
 	public Client client;
 	public ServerManager serverManager;
-	public InputHandler inputHandler;
 	
 	@Override
 	public void create () {
 		serverManager = new ServerManager(true);
 		client = new Client("localhost", 30916);
-		inputHandler = new InputHandler(this);
 
 		screens = new ArrayList<Screen>();
 		load = new LoadingScreen();
