@@ -8,6 +8,8 @@
 core/build/*
 desktop/build/*
 
+*.iml
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -19,4 +21,14 @@ desktop/build/*
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 .idea/vcs.xml
+.idea/workspace.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/libraries/Gradle__com_badlogicgames_jlayer_jlayer_1_0_1_gdx.xml
+.idea/libraries/Gradle__org_lwjgl_lwjgl_lwjgl_util_2_9_2.xml
+.idea/misc.xml
+.idea/libraries/Gradle__com_badlogicgames_gdx_gdx_box2d_1_9_4.xml
+.idea/libraries/Gradle__org_lwjgl_lwjgl_lwjgl_util_2_9_2.xml
+.idea/libraries/Gradle__net_java_jinput_jinput_2_0_5.xml
+.idea/workspace.xml
 .idea/workspace.xml

@@ -10,9 +10,7 @@ import se.doverfelt.thegame.net.packet.PacketWrapper;
 import java.io.*;
 import java.util.ArrayList;
 
-/**
- * Created by rickard on 2016-09-29.
- */
+
 public class ClientConnection {
 
     private final Socket socket;

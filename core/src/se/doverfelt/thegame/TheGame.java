@@ -7,8 +7,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import se.doverfelt.thegame.Screens.CScreen;
 import se.doverfelt.thegame.Screens.MainMenu;
+import se.doverfelt.thegame.net.Client;
 import se.doverfelt.thegame.server.ServerManager;
 import se.doverfelt.thegame.Screens.LoadingScreen;
 
@@ -22,8 +24,9 @@ public class TheGame extends Game {
 	public Assets assets;
 	SpriteBatch batch;
 
-
-
+	public Client client;
+	public ServerManager serverManager;
+	
 	@Override
 	public void create () {
 		//Initiation variables
@@ -38,7 +41,10 @@ public class TheGame extends Game {
 		setScreen(load);
 
 
-		ServerManager manager = new ServerManager(true);
+
+		serverManager = new ServerManager(true);
+		client = new Client("localhost", 30916);
+
 	}
 
 	@Override
