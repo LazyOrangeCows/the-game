@@ -1,33 +1,42 @@
 package se.doverfelt.thegame;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import se.doverfelt.thegame.Screens.LoadingScreen;
 
-public class TheGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+import java.util.ArrayList;
+
+public class TheGame extends Game {
+	LoadingScreen load;
+	ArrayList<Screen> screens;
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		screens = new ArrayList<Screen>();
+		load = new LoadingScreen();
+		screens.add(load);
+		setScreen(load);
+
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		for (Screen s:screens) {
+			s.render(Gdx.graphics.getDeltaTime());
+		}
+
+
+
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		//batch.dispose();
+		//img.dispose();
 	}
 }
