@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import se.doverfelt.thegame.server.ServerManager;
 import se.doverfelt.thegame.Screens.LoadingScreen;
 
 import java.util.ArrayList;
@@ -15,13 +16,17 @@ public class TheGame extends Game {
 	LoadingScreen load;
 	ArrayList<Screen> screens;
 
+
+
 	@Override
 	public void create () {
+
 		screens = new ArrayList<Screen>();
 		load = new LoadingScreen();
 		screens.add(load);
 		setScreen(load);
 
+		ServerManager manager = new ServerManager(true);
 	}
 
 	@Override

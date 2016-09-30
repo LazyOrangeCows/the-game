@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/core/src/se/doverfelt/thegame/TheGame.java" line="28" />
+    <bookmark url="file://$PROJECT_DIR$/core/src/se/doverfelt/thegame/TheGame.java" line="33" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3ee71b7-1a4d-4950-9b70-4dc684410a87" name="Default" comment="" />
@@ -64,9 +64,11 @@
       <file leaf-file-name="TheGame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/src/se/doverfelt/thegame/TheGame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-              <folding />
+            <state relative-caret-position="748">
+              <caret line="44" column="22" selection-start-line="44" selection-start-column="22" selection-end-line="44" selection-end-column="22" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -885,9 +887,9 @@
       <list>
         <option value="$PROJECT_DIR$/core/src/se/doverfelt/thegame/Assets.java" />
         <option value="$PROJECT_DIR$/core/src/se/doverfelt/thegame/TestMain.java" />
-        <option value="$PROJECT_DIR$/core/src/se/doverfelt/thegame/TheGame.java" />
         <option value="$PROJECT_DIR$/core/src/se/doverfelt/thegame/Screens/LoadingScreen.java" />
         <option value="$PROJECT_DIR$/core/src/se/doverfelt/thegame/Screens/MainMenu.java" />
+        <option value="$PROJECT_DIR$/core/src/se/doverfelt/thegame/TheGame.java" />
       </list>
     </option>
   </component>
@@ -1510,9 +1512,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/se/doverfelt/thegame/TheGame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-          <folding />
+        <state relative-caret-position="748">
+          <caret line="44" column="22" selection-start-line="44" selection-start-column="22" selection-end-line="44" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
