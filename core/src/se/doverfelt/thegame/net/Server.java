@@ -15,7 +15,9 @@ import se.doverfelt.thegame.net.util.ClientConnection;
 import se.doverfelt.thegame.net.util.PacketListener;
 
 import java.io.IOException;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 /**
@@ -25,7 +27,6 @@ public class Server {
 
     private final ServerSocket serverSocket;
     private final SocketHints socketHints;
-    private Socket socket;
     private ArrayList<PacketListener> packetListeners = new ArrayList<PacketListener>();
     private HashMap<String, ClientConnection> connections = new HashMap<String, ClientConnection>();
     private Json json;
@@ -98,5 +99,30 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getAddress() throws SocketException {
+        for (final Enumeration< NetworkInterface > interfaces = NetworkInterface.getNetworkInterfaces( ); interfaces.hasMoreElements( ); ) {
+            final NetworkInterface cur = interfaces.nextElement( );
+
+            if (cur.isLoopback()) {
+                continue;
+            }
+
+            for ( final InterfaceAddress addr : cur.getInterfaceAddresses()) {
+                final InetAddress inetAddr = addr.getAddress();
+
+                if (!( inetAddr instanceof Inet4Address) )
+                {
+                    continue;
+                }
+
+                if (!(inetAddr.isMulticastAddress()) && !(inetAddr.isMulticastAddress()) && !(inetAddr.isAnyLocalAddress()) && inetAddr.isSiteLocalAddress()) {
+                    return inetAddr.getHostAddress();
+                }
+
+            }
+        }
+        return null;
     }
 }
