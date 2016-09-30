@@ -31,6 +31,10 @@ public class Server {
     private HashMap<String, ClientConnection> connections = new HashMap<String, ClientConnection>();
     private Json json;
 
+    /**
+     * @param host
+     * @param port
+     */
     public Server(String host, int port) {
         json = new Json();
         ServerSocketHints hints = new ServerSocketHints();
@@ -41,16 +45,30 @@ public class Server {
         startAccepting();
     }
 
+    /**
+     * Send a packet
+     * @param packet The packet {@link Packet}
+     * @param address The receiving address
+     * @throws IOException Exception...
+     */
     public void send(Packet packet, String address) throws IOException {
         connections.get(address).send(packet);
     }
 
+    /**
+     * @param packet The packet {@link Packet}
+     * @throws IOException
+     */
     public void broadcast(Packet packet) throws IOException {
         for (ClientConnection c : connections.values()) {
             c.send(packet);
         }
     }
 
+    /**
+     *
+     * @param listener The packet listener
+     */
     public void addPacketListener(PacketListener listener) {
         packetListeners.add(listener);
         for (ClientConnection c : connections.values()) {
@@ -58,9 +76,10 @@ public class Server {
         }
     }
 
-    public void startAccepting() {
+    private void startAccepting() {
         final Server server = this;
         Runnable acceptor = new Runnable() {
+            @SuppressWarnings("InfiniteLoopStatement")
             @Override
             public void run() {
                 while (true) {
@@ -101,6 +120,10 @@ public class Server {
         }
     }
 
+    /**
+     * @return The address of the local host in LAN
+     * @throws SocketException Something went wrong...
+     */
     public String getAddress() throws SocketException {
         for (final Enumeration< NetworkInterface > interfaces = NetworkInterface.getNetworkInterfaces( ); interfaces.hasMoreElements( ); ) {
             final NetworkInterface cur = interfaces.nextElement( );
