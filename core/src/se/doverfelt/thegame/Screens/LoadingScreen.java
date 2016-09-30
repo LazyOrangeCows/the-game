@@ -37,13 +37,13 @@ public class LoadingScreen implements CScreen{
 
     @Override
     public void render(float delta, SpriteBatch batch) {
-        if (!manager.update()){
+        if (manager.update()){
             game.setScreen(game.screens.get("main"));
         }
-        String s = "" + manager.getProgress();
-        System.out.println( "" + manager.getProgress());
+        String s = + ( 100 *manager.getProgress()) + "%";
+        System.out.println(s);
         batch.begin();
-        font.draw(batch, s,0,0);
+        font.draw(batch, s,20,20);
         batch.end();
     }
     //public void update(float delta){
