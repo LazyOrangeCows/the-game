@@ -21,12 +21,11 @@ import java.io.IOException;
 /**
  * Created by rickard on 2016-09-30.
  */
-public class InputTestScreen implements Screen {
+public class InputTestScreen implements CScreen {
 
     private final TheGame theGame;
     private final InputManager inputHandler;
     private String text = "";
-    private SpriteBatch batch = new SpriteBatch();
     private BitmapFont font = new BitmapFont();
     private String textMouse = "";
 
@@ -66,17 +65,7 @@ public class InputTestScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        try {
-            inputHandler.poll();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        batch.begin();
-        font.draw(batch, text, 50, 50);
-        font.draw(batch, textMouse, 50, 80);
-        batch.end();
+
     }
 
     @Override
@@ -102,5 +91,20 @@ public class InputTestScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    public void render(float delta, SpriteBatch batch) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        try {
+            inputHandler.poll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        batch.begin();
+        font.draw(batch, text, 50, 50);
+        font.draw(batch, textMouse, 50, 80);
+        batch.end();
     }
 }

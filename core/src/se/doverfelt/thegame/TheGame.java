@@ -31,20 +31,22 @@ public class TheGame extends Game {
 	@Override
 	public void create () {
 		//Initiation variables
+		serverManager = new ServerManager(true);
+		client = new Client("localhost", 30916);
 		assets = new Assets();
 		screens = new HashMap<String, Screen>();
 		LoadingScreen load = new LoadingScreen(this);
 		MainMenu main = new MainMenu(this);
+		InputTestScreen input = new InputTestScreen(this);
 		batch = new SpriteBatch();
 
 		screens.put("load", load);
 		screens.put("main", main);
-		setScreen(load);
+		screens.put("input", input);
 
 		new ServerWorld();
 
-		serverManager = new ServerManager(true);
-		client = new Client("localhost", 30916);
+		setScreen(load);
 	}
 
 	@Override
