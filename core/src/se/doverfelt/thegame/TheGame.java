@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import se.doverfelt.thegame.Screens.InputTestScreen;
 import se.doverfelt.thegame.net.Client;
 import se.doverfelt.thegame.server.ServerManager;
 import se.doverfelt.thegame.Screens.LoadingScreen;
@@ -28,15 +29,15 @@ public class TheGame extends Game {
 		screens = new ArrayList<Screen>();
 		load = new LoadingScreen();
 		screens.add(load);
-		setScreen(load);
+		setScreen(new InputTestScreen(this));
 	}
 
 	@Override
 	public void render () {
-		for (Screen s:screens) {
+		/*for (Screen s:screens) {
 			s.render(Gdx.graphics.getDeltaTime());
-		}
-
+		}*/
+		super.render();
 
 
 	}

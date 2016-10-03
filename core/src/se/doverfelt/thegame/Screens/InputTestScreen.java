@@ -3,6 +3,8 @@ package se.doverfelt.thegame.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
@@ -30,10 +32,18 @@ public class InputTestScreen implements Screen {
     public InputTestScreen(TheGame theGame) {
         this.theGame = theGame;
         this.inputHandler = new InputManager(theGame);
-        inputHandler.addKey(Input.Keys.A);
-        inputHandler.addKey(Input.Keys.W);
-        inputHandler.addKey(Input.Keys.S);
-        inputHandler.addKey(Input.Keys.D);
+
+        for (Controller controller : Controllers.getControllers()) {
+            inputHandler.setController(controller);
+        }
+
+
+
+        inputHandler.addKey(Input.Keys.A, InputManager.Event.WALK_LEFT);
+        inputHandler.addKey(Input.Keys.W, InputManager.Event.JUMP);
+        inputHandler.addKey(Input.Keys.D, InputManager.Event.WALK_RIGHT);
+        inputHandler.addButton(Input.Buttons.LEFT, InputManager.Event.FIRE);
+        inputHandler.addButton(Input.Buttons.RIGHT, InputManager.Event.SECONDARY_FIRE);
         theGame.client.addPacketListener(new PacketListener() {
             @Override
             public void handlePacket(PacketWrapper packet) {

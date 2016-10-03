@@ -104,7 +104,7 @@ public class Server {
 
         if (p.packet instanceof Packet4KeyPressed) {
             Packet5Message packet5Message = new Packet5Message();
-            packet5Message.message = Input.Keys.toString(((Packet4KeyPressed) p.packet).key);
+            packet5Message.message = ((Packet4KeyPressed) p.packet).event.name();
             try {
                 broadcast(packet5Message);
             } catch (IOException e) {
