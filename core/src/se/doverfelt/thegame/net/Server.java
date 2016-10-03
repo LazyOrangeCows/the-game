@@ -105,6 +105,18 @@ public class Server {
         if (p.packet instanceof Packet4KeyPressed) {
             Packet5Message packet5Message = new Packet5Message();
             packet5Message.message = ((Packet4KeyPressed) p.packet).event.name();
+            packet5Message.channel = "KeyPressed";
+            try {
+                broadcast(packet5Message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (p.packet instanceof Packet6MouseMoved) {
+            Packet5Message packet5Message = new Packet5Message();
+            packet5Message.message = "X: " + ((Packet6MouseMoved) p.packet).x + " Y: " + ((Packet6MouseMoved) p.packet).y;
+            packet5Message.channel = "Mouse";
             try {
                 broadcast(packet5Message);
             } catch (IOException e) {

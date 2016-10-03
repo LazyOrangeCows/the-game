@@ -38,6 +38,7 @@ public class Client {
 
     public void send(Packet packet) throws IOException {
         PacketWrapper wrapper = new PacketWrapper();
+        packet.timestamp = System.currentTimeMillis();
         wrapper.packet = packet;
         writer.write(json.toJson(wrapper));
         writer.newLine();

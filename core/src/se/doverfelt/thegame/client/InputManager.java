@@ -6,6 +6,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import se.doverfelt.thegame.TheGame;
 import se.doverfelt.thegame.net.packet.Packet4KeyPressed;
+import se.doverfelt.thegame.net.packet.Packet6MouseMoved;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public class InputManager {
     private HashMap<Integer, Event> keys = new HashMap<Integer, Event>();
     private HashMap<Integer, Event> buttons = new HashMap<Integer, Event>();
     private Controller controller;
+    private float lastMouseX = 0, lastMouseY = 0;
+    private float lXDiff, lYDiff, rXDiff, rYDiff;
 
     public InputManager(TheGame theGame) {
         this.theGame = theGame;
@@ -47,6 +50,36 @@ public class InputManager {
                 theGame.client.send(keyPressed);
             }
         }
+
+        if (controller.getAxis(3) < -0.3 || controller.getAxis(3) > 0.3) {
+            Packet6MouseMoved packet = new Packet6MouseMoved();
+            lastMouseX += Math.max(1, lastMouseX)*(controller.getAxis(3) - rXDiff)*Gdx.graphics.getDeltaTime();
+            packet.x = (int) lastMouseX;
+            packet.y = (int) lastMouseY;
+            try {
+                theGame.client.send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (controller.getAxis(2) < -0.3 || controller.getAxis(2) > 0.3) {
+            Packet6MouseMoved packet = new Packet6MouseMoved();
+            lastMouseY -= Math.max(1, lastMouseY)*(controller.getAxis(2) - rYDiff)*Gdx.graphics.getDeltaTime();
+            packet.x = (int) lastMouseX;
+            packet.y = (int) lastMouseY;
+            theGame.client.send(packet);
+        }
+
+        if (Gdx.input.getDeltaX() != 0 && Gdx.input.getDeltaY() != 0) {
+            Packet6MouseMoved packet = new Packet6MouseMoved();
+            packet.x = Gdx.input.getX();
+            packet.y = Gdx.input.getY();
+            lastMouseX = Gdx.input.getX();
+            lastMouseY = Gdx.input.getY();
+            theGame.client.send(packet);
+        }
+
     }
 
     private void sendAction(Event event) throws IOException {
@@ -57,10 +90,14 @@ public class InputManager {
 
     public void setController(Controller controller) {
         this.controller = controller;
+        lXDiff = controller.getAxis(1);
+        lYDiff = controller.getAxis(0);
+        rXDiff = controller.getAxis(3);
+        rYDiff = controller.getAxis(2);
         this.controller.addListener(new ControllerAdapter() {
             @Override
             public boolean buttonDown(Controller controller, int buttonIndex) {
-                Gdx.app.log("Controller", "Button - " + buttonIndex);
+                Gdx.app.error("Controller", "Button - " + buttonIndex);
                 if (buttonIndex == 0) {
                     try {
                         sendAction(Event.JUMP);
@@ -85,7 +122,7 @@ public class InputManager {
 
             @Override
             public boolean axisMoved(Controller controller, int axisIndex, float value) {
-                Gdx.app.log("Controller", "Axis #" + axisIndex + " - " + value);
+                Gdx.app.error("Controller", "Axis #" + axisIndex + " - " + value);
                 if (axisIndex == 1) {
                     if (value < -0.1f) {
                         try {

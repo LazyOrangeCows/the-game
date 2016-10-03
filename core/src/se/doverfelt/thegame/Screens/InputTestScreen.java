@@ -28,6 +28,7 @@ public class InputTestScreen implements Screen {
     private String text = "";
     private SpriteBatch batch = new SpriteBatch();
     private BitmapFont font = new BitmapFont();
+    private String textMouse = "";
 
     public InputTestScreen(TheGame theGame) {
         this.theGame = theGame;
@@ -48,7 +49,11 @@ public class InputTestScreen implements Screen {
             @Override
             public void handlePacket(PacketWrapper packet) {
                 if (packet.packet instanceof Packet5Message) {
-                    text = ((Packet5Message) packet.packet).message;
+                    if (((Packet5Message) packet.packet).channel.equals("KeyPressed")) {
+                        text = ((Packet5Message) packet.packet).message;
+                    } else if (((Packet5Message) packet.packet).channel.equals("Mouse")) {
+                        textMouse = ((Packet5Message) packet.packet).message;
+                    }
                 }
             }
         });
@@ -70,6 +75,7 @@ public class InputTestScreen implements Screen {
         }
         batch.begin();
         font.draw(batch, text, 50, 50);
+        font.draw(batch, textMouse, 50, 80);
         batch.end();
     }
 
