@@ -117,15 +117,20 @@ public class Server {
             Packet5Message packet5Message = new Packet5Message();
             packet5Message.message = "X: " + ((Packet6MouseMoved) p.packet).x + " Y: " + ((Packet6MouseMoved) p.packet).y;
             packet5Message.channel = "Mouse";
+            Packet7TexturePosition packet7TexturePosition = new Packet7TexturePosition();
+            packet7TexturePosition.texture = "badlogic.jpg";
+            packet7TexturePosition.x = ((Packet6MouseMoved) p.packet).x;
+            packet7TexturePosition.y = ((Packet6MouseMoved) p.packet).y;
             try {
                 broadcast(packet5Message);
+                broadcast(packet7TexturePosition);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            Gdx.app.log("Server", "Recieved packet" + p.packet);
+            //Gdx.app.log("Server", "Recieved packet" + p.packet);
             broadcast(p.packet);
 
         } catch (IOException e) {

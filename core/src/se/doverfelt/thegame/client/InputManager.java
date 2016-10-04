@@ -51,27 +51,30 @@ public class InputManager {
             }
         }
 
-        if (controller.getAxis(3) < -0.3 || controller.getAxis(3) > 0.3) {
-            Packet6MouseMoved packet = new Packet6MouseMoved();
-            lastMouseX += Math.max(1, lastMouseX)*(controller.getAxis(3) - rXDiff)*Gdx.graphics.getDeltaTime();
-            packet.x = (int) lastMouseX;
-            packet.y = (int) lastMouseY;
-            try {
-                theGame.client.send(packet);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (controller != null) {
+            if (controller.getAxis(3) < -0.3 || controller.getAxis(3) > 0.3) {
+                Packet6MouseMoved packet = new Packet6MouseMoved();
+                lastMouseX += Math.max(1, lastMouseX) * (controller.getAxis(3) - rXDiff) * Gdx.graphics.getDeltaTime();
+                packet.x = (int) lastMouseX;
+                packet.y = (int) lastMouseY;
+                try {
+                    theGame.client.send(packet);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+            if (controller.getAxis(2) < -0.3 || controller.getAxis(2) > 0.3) {
+                Packet6MouseMoved packet = new Packet6MouseMoved();
+                lastMouseY -= Math.max(1, lastMouseY) * (controller.getAxis(2) - rYDiff) * Gdx.graphics.getDeltaTime();
+                packet.x = (int) lastMouseX;
+                packet.y = (int) lastMouseY;
+                theGame.client.send(packet);
+            }
+
         }
 
-        if (controller.getAxis(2) < -0.3 || controller.getAxis(2) > 0.3) {
-            Packet6MouseMoved packet = new Packet6MouseMoved();
-            lastMouseY -= Math.max(1, lastMouseY)*(controller.getAxis(2) - rYDiff)*Gdx.graphics.getDeltaTime();
-            packet.x = (int) lastMouseX;
-            packet.y = (int) lastMouseY;
-            theGame.client.send(packet);
-        }
-
-        if (Gdx.input.getDeltaX() != 0 && Gdx.input.getDeltaY() != 0) {
+        if (Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0) {
             Packet6MouseMoved packet = new Packet6MouseMoved();
             packet.x = Gdx.input.getX();
             packet.y = Gdx.input.getY();

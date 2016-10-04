@@ -1,8 +1,10 @@
 package se.doverfelt.thegame.net.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.Json;
+import se.doverfelt.thegame.net.Client;
 import se.doverfelt.thegame.net.packet.PacketWrapper;
 
 import java.io.BufferedReader;
@@ -19,9 +21,11 @@ public class PacketListenerThread implements Runnable {
     private BufferedReader reader;
     private ArrayList<PacketListener> packetListeners = new ArrayList<PacketListener>();
     private boolean shouldRun = true;
+    private final Client client;
 
-    public PacketListenerThread(Socket socket) {
+    public PacketListenerThread(Socket socket, Client client) {
         this.socket = socket;
+        this.client = client;
         json = new Json();
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
@@ -36,7 +40,8 @@ public class PacketListenerThread implements Runnable {
         while (shouldRun) {
             try {
                 PacketWrapper p = json.fromJson(PacketWrapper.class, reader.readLine());
-                Gdx.app.log("Client", p.toString());
+                //Gdx.app.log("Client", p.toString());
+                client.ping = (int) (System.currentTimeMillis() - client.lastPacket);
                 for (PacketListener packetListener : packetListeners) {
                     packetListener.handlePacket(p);
                 }

@@ -56,7 +56,7 @@ public class ClientConnection {
         wrapper.packet = packet;
         writer.write(json.toJson(wrapper));
         writer.newLine();
-        Gdx.app.log("ClientConncection - " + socket.getRemoteAddress(), json.toJson(packet));
+        //Gdx.app.log("ClientConncection - " + socket.getRemoteAddress(), json.toJson(packet));
         writer.flush();
     }
 

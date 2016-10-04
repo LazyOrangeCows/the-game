@@ -25,6 +25,8 @@ public class Client {
     private BufferedWriter writer;
     private Json json;
     private PacketListenerThread listener;
+    public long lastPacket = 0;
+    public int ping;
 
     public Client(String host, int port) {
         json = new Json();
@@ -43,6 +45,11 @@ public class Client {
         writer.write(json.toJson(wrapper));
         writer.newLine();
         writer.flush();
+        lastPacket = System.currentTimeMillis();
+    }
+
+    public int getPing() {
+        return ping;
     }
 
     public void addPacketListener(PacketListener listener) {
@@ -50,7 +57,7 @@ public class Client {
     }
 
     private void startListening() {
-        listener = new PacketListenerThread(socket);
+        listener = new PacketListenerThread(socket, this);
         Thread t = new Thread(listener, "packetListener");
         t.start();
         addPacketListener(new PacketListener() {

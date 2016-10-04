@@ -3,16 +3,20 @@ package se.doverfelt.thegame.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import se.doverfelt.thegame.client.InputManager;
 import se.doverfelt.thegame.TheGame;
 import se.doverfelt.thegame.net.packet.Packet5Message;
+import se.doverfelt.thegame.net.packet.Packet7TexturePosition;
 import se.doverfelt.thegame.net.packet.PacketWrapper;
 import se.doverfelt.thegame.net.util.PacketListener;
 
@@ -28,10 +32,15 @@ public class InputTestScreen implements CScreen {
     private String text = "";
     private BitmapFont font = new BitmapFont();
     private String textMouse = "";
+    private AssetManager manager;
+    private float x = 10, y = 10;
+    private Sprite logo;
+    private long lastTexture = 0;
 
-    public InputTestScreen(TheGame theGame) {
+    public InputTestScreen(final TheGame theGame) {
         this.theGame = theGame;
         this.inputHandler = new InputManager(theGame);
+        manager = theGame.assets.getAssetManager();
 
         for (Controller controller : Controllers.getControllers()) {
             inputHandler.setController(controller);
@@ -53,6 +62,14 @@ public class InputTestScreen implements CScreen {
                     } else if (((Packet5Message) packet.packet).channel.equals("Mouse")) {
                         textMouse = ((Packet5Message) packet.packet).message;
                     }
+                } else if (packet.packet instanceof Packet7TexturePosition) {
+                    if (((Packet7TexturePosition) packet.packet).texture.equals("badlogic.jpg") && packet.packet.timestamp > lastTexture) {
+                        x = ((Packet7TexturePosition) packet.packet).x;
+                        y = Gdx.graphics.getHeight()-((Packet7TexturePosition) packet.packet).y;
+                        lastTexture = packet.packet.timestamp;
+                    } else if (((Packet7TexturePosition) packet.packet).texture.equals("badlogic.jpg")) {
+                        Gdx.app.log("InputManager", "Dropped packet - " + (lastTexture - packet.packet.timestamp) + "ms late");
+                    }
                 }
             }
         });
@@ -60,7 +77,7 @@ public class InputTestScreen implements CScreen {
 
     @Override
     public void show() {
-
+        logo = new Sprite(manager.get("badlogic.jpg", Texture.class));
     }
 
     @Override
@@ -102,9 +119,12 @@ public class InputTestScreen implements CScreen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logo.setPosition(x, y);
         batch.begin();
+        logo.draw(batch);
         font.draw(batch, text, 50, 50);
         font.draw(batch, textMouse, 50, 80);
+        font.draw(batch, "Ping: " + theGame.client.getPing(), 50, 110);
         batch.end();
     }
 }
