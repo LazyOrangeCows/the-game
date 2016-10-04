@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import se.doverfelt.thegame.Screens.MapTestScreen;
 import se.doverfelt.thegame.server.ServerWorld;
 
 import se.doverfelt.thegame.server.ServerManager;
@@ -38,15 +39,16 @@ public class TheGame extends Game {
 		screens = new ArrayList<Screen>();
 		load = new LoadingScreen();
 		screens.add(load);
-		setScreen(load);
+		setScreen(new MapTestScreen());
 
 	}
 
 	@Override
 	public void render () {
-		for (Screen s:screens) {
+		/*for (Screen s:screens) {
 			s.render(Gdx.graphics.getDeltaTime());
-		}
+		}*/
+		super.render();
 
 
 
