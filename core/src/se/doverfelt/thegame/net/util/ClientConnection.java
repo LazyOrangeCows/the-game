@@ -67,6 +67,9 @@ public class ClientConnection {
                     try {
                         PacketWrapper p = json.fromJson(PacketWrapper.class, reader.readLine());
                         server.handle(p, socket.getRemoteAddress());
+                        for (PacketListener l : packetListeners) {
+                            l.handlePacket(p, socket.getRemoteAddress());
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

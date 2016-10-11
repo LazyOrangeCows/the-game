@@ -54,7 +54,7 @@ public class Client {
         t.start();
         addPacketListener(new PacketListener() {
             @Override
-            public void handlePacket(PacketWrapper packet) {
+            public void handlePacket(PacketWrapper packet, String remoteAddress) {
                 if (packet.packet instanceof Packet3Disconnected) {
                     listener.stop();
                     socket.dispose();
