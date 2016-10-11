@@ -52,10 +52,11 @@ public class ClientConnection {
      */
     public void send(Packet packet) throws IOException {
         PacketWrapper wrapper = new PacketWrapper();
+        packet.timestamp = System.currentTimeMillis();
         wrapper.packet = packet;
         writer.write(json.toJson(wrapper));
         writer.newLine();
-        Gdx.app.log("ClientConncection - " + socket.getRemoteAddress(), json.toJson(packet));
+        //Gdx.app.log("ClientConncection - " + socket.getRemoteAddress(), json.toJson(packet));
         writer.flush();
     }
 

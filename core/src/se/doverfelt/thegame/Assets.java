@@ -26,6 +26,8 @@ public class Assets {
         manager.load("harambe11.png", Texture.class);
         manager.load("harambe12.png", Texture.class);
 
+        manager.load("badlogic.jpg", Texture.class);
+
         update();
 
 
