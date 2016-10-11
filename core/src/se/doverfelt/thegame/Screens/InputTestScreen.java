@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import se.doverfelt.thegame.client.InputManager;
 import se.doverfelt.thegame.TheGame;
 import se.doverfelt.thegame.net.packet.Packet5Message;
@@ -36,7 +34,7 @@ public class InputTestScreen implements Screen {
         inputHandler.addKey(Input.Keys.D);
         theGame.client.addPacketListener(new PacketListener() {
             @Override
-            public void handlePacket(PacketWrapper packet) {
+            public void handlePacket(PacketWrapper packet, String remoteAddress) {
                 if (packet.packet instanceof Packet5Message) {
                     text = ((Packet5Message) packet.packet).message;
                 }
