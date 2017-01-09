@@ -2,11 +2,13 @@ package se.doverfelt.thegame.net;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.Json;
 import se.doverfelt.thegame.net.packet.Packet;
 import se.doverfelt.thegame.net.packet.Packet3Disconnected;
+import se.doverfelt.thegame.net.packet.Packet8Ping;
 import se.doverfelt.thegame.net.packet.PacketWrapper;
 import se.doverfelt.thegame.net.util.PacketListener;
 import se.doverfelt.thegame.net.util.PacketListenerThread;
@@ -25,8 +27,8 @@ public class Client {
     private BufferedWriter writer;
     private Json json;
     private PacketListenerThread listener;
-    public long lastPacket = 0;
     public int ping;
+    private long lastPingtime = 0;
 
     public Client(String host, int port) {
         json = new Json();
@@ -45,7 +47,6 @@ public class Client {
         writer.write(json.toJson(wrapper));
         writer.newLine();
         writer.flush();
-        lastPacket = System.currentTimeMillis();
     }
 
     public int getPing() {
@@ -60,12 +61,45 @@ public class Client {
         listener = new PacketListenerThread(socket, this);
         Thread t = new Thread(listener, "packetListener");
         t.start();
+        Runnable pinger = new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Packet8Ping pingPacket = new Packet8Ping();
+                    pingPacket.server = false;
+                    try {
+                        lastPingtime = System.currentTimeMillis();
+                        send(pingPacket);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        Thread pingThread = new Thread(pinger);
+        pingThread.start();
         addPacketListener(new PacketListener() {
             @Override
             public void handlePacket(PacketWrapper packet, String remoteAddress) {
                 if (packet.packet instanceof Packet3Disconnected) {
                     listener.stop();
                     socket.dispose();
+                }
+            }
+        });
+        addPacketListener(new PacketListener() {
+            @Override
+            public void handlePacket(PacketWrapper packet, String remoteAddress) {
+                if (packet.packet instanceof Packet8Ping) {
+                    Packet8Ping pingp = (Packet8Ping) packet.packet;
+                    if (pingp.server) {
+                        ping = (int) (System.currentTimeMillis() - lastPingtime);
+                    }
                 }
             }
         });

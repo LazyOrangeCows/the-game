@@ -5,6 +5,7 @@ import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.Json;
 import se.doverfelt.thegame.net.Server;
 import se.doverfelt.thegame.net.packet.Packet;
+import se.doverfelt.thegame.net.packet.Packet8Ping;
 import se.doverfelt.thegame.net.packet.PacketWrapper;
 
 import java.io.*;
@@ -21,6 +22,7 @@ public class ClientConnection {
     private final Server server;
     private Thread t;
     private boolean connected = false;
+    private long lastPingtime = System.currentTimeMillis();
 
     /**
      * @param socket The Client socket
@@ -68,6 +70,11 @@ public class ClientConnection {
                     try {
                         PacketWrapper p = json.fromJson(PacketWrapper.class, reader.readLine());
                         server.handle(p, socket.getRemoteAddress());
+                        if (p.packet instanceof Packet8Ping) {
+                            Packet8Ping pong = new Packet8Ping();
+                            pong.server = true;
+                            send(pong);
+                        }
                         for (PacketListener l : packetListeners) {
                             l.handlePacket(p, socket.getRemoteAddress());
                         }

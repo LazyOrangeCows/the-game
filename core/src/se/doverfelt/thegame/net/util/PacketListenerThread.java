@@ -41,7 +41,6 @@ public class PacketListenerThread implements Runnable {
             try {
                 PacketWrapper p = json.fromJson(PacketWrapper.class, reader.readLine());
                 //Gdx.app.log("Client", p.toString());
-                client.ping = (int) (System.currentTimeMillis() - client.lastPacket);
                 for (PacketListener packetListener : packetListeners) {
                     packetListener.handlePacket(p, socket.getRemoteAddress());
                 }
