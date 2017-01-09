@@ -59,7 +59,13 @@ public class Server {
      */
     public void broadcast(Packet packet) throws IOException {
         for (ClientConnection c : connections.values()) {
-            c.send(packet);
+            try {
+                c.send(packet);
+            } catch (IOException e) {
+                c.close();
+                connections.remove(c.getAddress());
+                throw e;
+            }
         }
     }
 

@@ -87,4 +87,8 @@ public class ClientConnection {
     public void close() {
         connected = false;
     }
+
+    public String getAddress() {
+        return socket.getRemoteAddress();
+    }
 }
