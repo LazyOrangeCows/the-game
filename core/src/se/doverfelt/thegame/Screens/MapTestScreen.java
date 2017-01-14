@@ -23,6 +23,7 @@ public class MapTestScreen implements Screen {
         map = new TmxMapLoader().load("test3.0.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, batch);
         camera = new OrthographicCamera(32*30, 32*15);
+        camera.setToOrtho(false, 32*30, 32*15);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class MapTestScreen implements Screen {
     public void render(float delta) {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        renderer.setView(camera);
         renderer.render();
     }
 

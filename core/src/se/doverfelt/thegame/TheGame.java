@@ -39,11 +39,13 @@ public class TheGame extends Game {
 		LoadingScreen load = new LoadingScreen(this);
 		MainMenu main = new MainMenu(this);
 		InputTestScreen input = new InputTestScreen(this);
+		MapTestScreen map = new MapTestScreen();
 		batch = new SpriteBatch();
 
 		screens.put("load", load);
 		screens.put("main", main);
 		screens.put("input", input);
+		screens.put("map", map);
 
 		new ServerWorld();
 
