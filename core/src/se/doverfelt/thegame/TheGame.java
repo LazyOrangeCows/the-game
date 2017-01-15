@@ -32,14 +32,14 @@ public class TheGame extends Game {
 	@Override
 	public void create () {
 		//Initiation variables
-		serverManager = new ServerManager(true);
+		serverManager = new ServerManager(false);
 		client = new Client("localhost", 30916);
 		assets = new Assets();
 		screens = new HashMap<String, Screen>();
 		LoadingScreen load = new LoadingScreen(this);
 		MainMenu main = new MainMenu(this);
 		InputTestScreen input = new InputTestScreen(this);
-		MapTestScreen map = new MapTestScreen();
+		MapTestScreen map = new MapTestScreen(this);
 		batch = new SpriteBatch();
 
 		screens.put("load", load);
