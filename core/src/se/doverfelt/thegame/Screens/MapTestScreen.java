@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import se.doverfelt.thegame.TheGame;
+import se.doverfelt.thegame.utils.MapUtils;
 
 /**
  * Created by rickard on 2016-09-30.
@@ -61,93 +62,12 @@ public class MapTestScreen implements Screen {
         fixtureDef.restitution = 0;
         playerFixture = player.createFixture(fixtureDef);
         polygonShape.dispose();
-        initWorldBodies();
+        MapUtils.populateWorld(world, map);
     }
 
     @Override
     public void show() {
 
-    }
-
-    private void initWorldBodies() {
-        for (MapLayer l : map.getLayers()){
-            for (MapObject obj : l.getObjects()) {
-                if (obj instanceof TextureMapObject) {
-                    continue;
-                }
-
-                if (obj instanceof PolygonMapObject) {
-                    addPolygonBody((PolygonMapObject) obj);
-                } else if (obj instanceof RectangleMapObject) {
-                    addRectangleBody((RectangleMapObject) obj);
-                } else if (obj instanceof PolylineMapObject) {
-                    addPolylineBody((PolylineMapObject) obj);
-                } else if (obj instanceof CircleMapObject) {
-                    addCircleBody((CircleMapObject) obj);
-                }
-            }
-        }
-    }
-
-    private void addCircleBody(CircleMapObject circleObject) {
-        Circle circle = circleObject.getCircle();
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(circle.radius / PPM);
-        circleShape.setPosition(new Vector2(circle.x / PPM, circle.y / PPM));
-        addStaticBody(circleShape);
-        circleShape.dispose();
-    }
-
-    private void addPolylineBody(PolylineMapObject obj) {
-        float[] vertices = obj.getPolyline().getTransformedVertices();
-        Vector2[] worldVertices = new Vector2[vertices.length / 2];
-
-        for (int i = 0; i < vertices.length / 2; ++i) {
-            worldVertices[i] = new Vector2();
-            worldVertices[i].x = vertices[i * 2] / PPM;
-            worldVertices[i].y = vertices[i * 2 + 1] / PPM;
-        }
-
-        ChainShape chain = new ChainShape();
-        chain.createChain(worldVertices);
-        addStaticBody(chain);
-        chain.dispose();
-    }
-
-    private void addRectangleBody(RectangleMapObject obj) {
-        Rectangle rectangle = obj.getRectangle();
-        PolygonShape polygon = new PolygonShape();
-        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / PPM,
-                (rectangle.y + rectangle.height * 0.5f ) / PPM);
-        polygon.setAsBox(rectangle.width * 0.5f / PPM,
-                rectangle.height * 0.5f / PPM,
-                size,
-                0.0f);
-        addStaticBody(polygon);
-        polygon.dispose();
-    }
-
-    private void addPolygonBody(PolygonMapObject obj) {
-        PolygonShape polygon = new PolygonShape();
-        float[] vertices = obj.getPolygon().getTransformedVertices();
-
-        float[] worldVertices = new float[vertices.length];
-
-        for (int i = 0; i < vertices.length; ++i) {
-            System.out.println(vertices[i]);
-            worldVertices[i] = vertices[i] / PPM;
-        }
-
-        polygon.set(worldVertices);
-        addStaticBody(polygon);
-        polygon.dispose();
-    }
-
-    private void addStaticBody(Shape shape) {
-        BodyDef def = new BodyDef();
-        def.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(def);
-        body.createFixture(shape, 1);
     }
 
     @Override
