@@ -7,6 +7,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import se.doverfelt.thegame.Screens.MapTestScreen;
+import se.doverfelt.thegame.Screens.InputTestScreen;
 import se.doverfelt.thegame.Screens.CScreen;
 import se.doverfelt.thegame.Screens.MainMenu;
 import se.doverfelt.thegame.server.ServerWorld;
@@ -30,20 +32,24 @@ public class TheGame extends Game {
 	@Override
 	public void create () {
 		//Initiation variables
+		serverManager = new ServerManager(false);
+		client = new Client("localhost", 30916);
 		assets = new Assets();
 		screens = new HashMap<String, Screen>();
 		LoadingScreen load = new LoadingScreen(this);
 		MainMenu main = new MainMenu(this);
+		InputTestScreen input = new InputTestScreen(this);
+		MapTestScreen map = new MapTestScreen(this);
 		batch = new SpriteBatch();
 
 		screens.put("load", load);
 		screens.put("main", main);
-		setScreen(load);
+		screens.put("input", input);
+		screens.put("map", map);
 
 		new ServerWorld();
 
-		serverManager = new ServerManager(true);
-		client = new Client("localhost", 30916);
+		setScreen(load);
 	}
 
 	@Override
@@ -56,9 +62,6 @@ public class TheGame extends Game {
 		}else {
 			super.render();
 		}
-
-
-
 	}
 	
 	@Override

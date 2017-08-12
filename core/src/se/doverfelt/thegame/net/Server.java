@@ -59,7 +59,13 @@ public class Server {
      */
     public void broadcast(Packet packet) throws IOException {
         for (ClientConnection c : connections.values()) {
-            c.send(packet);
+            try {
+                c.send(packet);
+            } catch (IOException e) {
+                c.close();
+                connections.remove(c.getAddress());
+                throw e;
+            }
         }
     }
 
@@ -104,7 +110,8 @@ public class Server {
 
         if (p.packet instanceof Packet4KeyPressed) {
             Packet5Message packet5Message = new Packet5Message();
-            packet5Message.message = Input.Keys.toString(((Packet4KeyPressed) p.packet).key);
+            packet5Message.message = ((Packet4KeyPressed) p.packet).event.name();
+            packet5Message.channel = "KeyPressed";
             try {
                 broadcast(packet5Message);
             } catch (IOException e) {
@@ -112,8 +119,24 @@ public class Server {
             }
         }
 
+        if (p.packet instanceof Packet6MouseMoved) {
+            Packet5Message packet5Message = new Packet5Message();
+            packet5Message.message = "X: " + ((Packet6MouseMoved) p.packet).x + " Y: " + ((Packet6MouseMoved) p.packet).y;
+            packet5Message.channel = "Mouse";
+            Packet7TexturePosition packet7TexturePosition = new Packet7TexturePosition();
+            packet7TexturePosition.texture = "badlogic.jpg";
+            packet7TexturePosition.x = ((Packet6MouseMoved) p.packet).x;
+            packet7TexturePosition.y = ((Packet6MouseMoved) p.packet).y;
+            try {
+                broadcast(packet5Message);
+                broadcast(packet7TexturePosition);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
-            Gdx.app.log("Server", "Recieved packet" + p.packet);
+            //Gdx.app.log("Server", "Recieved packet" + p.packet);
             broadcast(p.packet);
 
         } catch (IOException e) {

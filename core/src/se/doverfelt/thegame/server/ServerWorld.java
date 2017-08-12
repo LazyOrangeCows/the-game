@@ -38,7 +38,7 @@ public class ServerWorld {
 
     public ServerWorld(){
 
-        TiledMap map = new TmxMapLoader().load("test2.0.tmx");
+        TiledMap map = new TmxMapLoader().load("test3.0.tmx");
         Gdx.app.log("ServerWorld",map.toString());
 
 
